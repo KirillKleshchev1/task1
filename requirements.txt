@@ -1,0 +1,2 @@
+memory_profiler
+PyQt5~=5.15.9
