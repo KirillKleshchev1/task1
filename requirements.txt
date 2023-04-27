@@ -1,2 +1,3 @@
 memory_profiler
 PyQt5~=5.15.9
+requests==2.29.0
