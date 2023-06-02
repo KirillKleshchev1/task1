@@ -1,57 +1,73 @@
 import unittest
-import algorithms
-import main
+from algorithms import Kmp, RabinKarp, BoyerMoore, Naive
+from main import TYPES_MODE
 
 
 class TestTest(unittest.TestCase):
     def test_kmp(self):
-        pars = algorithms.Parser('aba', 'a')
-        assert main.TYPE['kmp'](pars) == [0, 2]
+        algorithm_object = Kmp("aba", "a")
+        self.assertEqual(algorithm_object.search_method(), [0, 2])
 
     def test_kmp_not_pattern(self):
-        pars = algorithms.Parser('aba', 'c')
-        assert main.TYPE['kmp'](pars) == []
+        algorithm_object = Kmp('aba', 'c')
+        self.assertEqual(algorithm_object.search_method(), [])
 
     def test_kmp_pattern_longer_text(self):
-        pars = algorithms.Parser('a', 'aba')
-        assert main.TYPE['kmp'](pars) == []
+        algorithm_object = Kmp("a", "aba")
+        self.assertEqual(algorithm_object.search_method(), [])
 
     def test_boyer_moore(self):
-        pars = algorithms.Parser('aba', 'a')
-        assert main.TYPE['boyer_moore'](pars) == [0, 2]
+        algorithm_object = BoyerMoore("aba", "a")
+        self.assertEqual(algorithm_object.search_method(), [0, 2])
 
     def test_boyer_moore_not_pattern(self):
-        pars = algorithms.Parser('aba', 'c')
-        assert main.TYPE['boyer_moore'](pars) == []
+        algorithm_object = BoyerMoore("aba", "c")
+        self.assertEqual(algorithm_object.search_method(), [])
 
     def test_boyer_moore_pattern_longer_text(self):
-        pars = algorithms.Parser('c', 'aba')
-        assert main.TYPE['boyer_moore'](pars) == []
+        algorithm_object = BoyerMoore("c", "aba")
+        self.assertEqual(algorithm_object.search_method(), [])
 
     def test_rk(self):
-        pars = algorithms.Parser('aba', 'a')
-        assert main.TYPE['rabin_karp'](pars) == [0, 2]
+        algorithm_object = RabinKarp("aba", "a")
+        self.assertEqual(algorithm_object.search_method(), [0, 2])
 
     def test_rk_not_pattern(self):
-        pars = algorithms.Parser('aba', 'c')
-        assert main.TYPE['rabin_karp'](pars) == []
+        algorithm_object = RabinKarp("aba", "c")
+        self.assertEqual(algorithm_object.search_method(), [])
 
     def test_rk_pattern_longer_text(self):
-        pars = algorithms.Parser('c', 'aba')
-        assert main.TYPE['rabin_karp'](pars) == []
+        algorithm_object = RabinKarp("c", "aba")
+        self.assertEqual(algorithm_object.search_method(), [])
 
     def test_native(self):
-        pars = algorithms.Parser('aba', 'a')
-        assert main.TYPE['naive'](pars) == [0, 2]
+        algorithm_object = Naive("aba", "a")
+        self.assertEqual(algorithm_object.search_method(), [0, 2])
 
     def test_naive_not_pattern(self):
-        pars = algorithms.Parser('aba', 'c')
-        assert main.TYPE['naive'](pars) == []
+        algorithm_object = Naive("aba", "c")
+        self.assertEqual(algorithm_object.search_method(), [])
 
     def test_naive_pattern_longer_text(self):
-        pars = algorithms.Parser('c', 'aba')
-        assert main.TYPE['naive'](pars) == []
+        algorithm_object = Naive("c", "aba")
+        self.assertEqual(algorithm_object.search_method(), [])
 
     def test_types_mode(self):
-        pars = algorithms.Parser('aba', 'a')
-        assert main.TYPES_MODE['time_check'](pars, main.TYPE['kmp']) == 0.0
+        algorithm_object = Kmp('aba', 'a')
+        assert TYPES_MODE['time_check'](algorithm_object) == 0.0
+
+    def test_kmp_invalid_input(self):
+        with self.assertRaises(TypeError):
+            Kmp(None, "a")
+
+    def test_boyer_moore_invalid_input(self):
+        with self.assertRaises(TypeError):
+            BoyerMoore("aba", b'a')
+
+    def test_rk_invalid_input(self):
+        with self.assertRaises(TypeError):
+            RabinKarp(b'aba', 'a')
+
+    def test_naive_invalid_input(self):
+        with self.assertRaises(TypeError):
+            Naive('aba', None)

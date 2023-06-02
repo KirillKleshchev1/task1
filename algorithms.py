@@ -1,42 +1,28 @@
 import time
 import memory_profiler
+from abc import ABC, abstractmethod
 
 PRIME_NUMBER = 31
 
 
-class Parser:
+class Parser(ABC):
     """
     Класс Парсер
     """
+
     def __init__(self, string: str, pattern: str):
+        if string is None or isinstance(string, bytes):
+            raise TypeError("Invalid input for string")
+        if pattern is None or isinstance(pattern, bytes):
+            raise TypeError("Invalid input for pattern")
+
         self.string = string
         self.pattern = pattern
 
+    @abstractmethod
+    def search_method(self) -> list:
+        pass
 
-class Mode(Parser):
-    """
-    Функция для просмотра времени работы алгоритма.
-    Принимает строку и подстроку, алгоритм поиска.
-    Возвращает время работы алгоритма.
-    """
-
-    def time_check(self, type_search) -> time:
-        start = time.time()
-        type_search(self)
-        return time.time() - start
-
-    @memory_profiler.profile
-    def memory_check(self, type_search) -> None:
-        """
-        Функция для просмотра использования памяти алгоритма.
-        Принимает строку и подстроку, алгоритм поиска.
-        Возвращает сколько памяти, использует алгоритм.
-        """
-        type_search(self)
-        return None
-
-
-class Kmp(Parser):
     @staticmethod
     def prefix_function(string: str) -> list:
         """
@@ -44,27 +30,52 @@ class Kmp(Parser):
         которая позволяет находить максимальный префикс строки.
         Принимает строку.
         Возвращает максимальный префикс строки.
-            """
+        """
         string_len = len(string)
         prefix = [0] * string_len
         for i in range(1, string_len):
             last_char_largest_prefix = prefix[i - 1]
-            while last_char_largest_prefix > 0 and \
-                    string[i] != string[last_char_largest_prefix]:
+            while last_char_largest_prefix > 0 and string[i] != string[last_char_largest_prefix]:
                 last_char_largest_prefix = prefix[last_char_largest_prefix - 1]
             if string[i] == string[last_char_largest_prefix]:
                 last_char_largest_prefix += 1
             prefix[i] = last_char_largest_prefix
         return prefix
 
-    def kmp(self) -> list:
+
+class Mode:
+    """
+    Функция для просмотра времени работы алгоритма.
+    Принимает строку и подстроку, алгоритм поиска.
+    Возвращает время работы алгоритма.
+    """
+
+    @staticmethod
+    def time_check(func: Parser) -> time:
+        start = time.time()
+        func.search_method()
+        return time.time() - start
+
+    @staticmethod
+    @memory_profiler.profile
+    def memory_check(func: Parser) -> None:
+        """
+        Функция для просмотра использования памяти алгоритма.
+        Принимает строку и подстроку, алгоритм поиска.
+        Возвращает количество памяти, используемое алгоритмом (в МБ).
+        """
+        func.search_method()
+
+
+class Kmp(Parser):
+    def search_method(self) -> list:
         """
         Функция, реализующая алгоритм Кнутта-Мориса-Пратта.
         Принимает строку и подстроку.
         Возвращает все вхождения подстроки в строку.
         """
         string_len, pattern_len = len(self.string), len(self.pattern)
-        prefix = Kmp.prefix_function(self.pattern)
+        prefix = self.prefix_function(self.string)
         current_prefix = 0
         result = []
         for i in range(string_len):
@@ -80,7 +91,7 @@ class Kmp(Parser):
 
 
 class BoyerMoore(Parser):
-    def boyer_moore(self) -> list:
+    def search_method(self) -> list:
         """
         Функция, реализующая алгоритм Бойера-Мура.
         Принимает строку и подстроку.
@@ -113,7 +124,7 @@ class BoyerMoore(Parser):
 
 
 class RabinKarp(Parser):
-    def rabin_karp(self) -> list:
+    def search_method(self) -> list:
         """
         Функция, реализующая алгоритм Рабина-Карпа.
         Принимает строку и подстроку.
@@ -140,7 +151,7 @@ class RabinKarp(Parser):
 
 
 class Naive(Parser):
-    def naive(self) -> list:
+    def search_method(self) -> list:
         """
         Функция, реализующая алгоритм наивного поиска.
         Принимает строку и подстроку.

@@ -4,22 +4,16 @@ import PyQt5
 from PyQt5.QtWidgets import QApplication
 from PyQt5 import uic, QtWidgets
 from algorithms import Kmp, Mode, BoyerMoore, RabinKarp, Naive, Parser
+from web_parser import WebParser
 
-TYPE = {"rabin_karp": RabinKarp.rabin_karp,
-        "boyer_moore": BoyerMoore.boyer_moore,
-        "naive": Naive.naive,
-        "kmp": Kmp.kmp
+TYPE = {"rabin_karp": RabinKarp,
+        "boyer_moore": BoyerMoore,
+        "naive": Naive,
+        "kmp": Kmp
         }
 TYPES_MODE = {"memory_check": Mode.memory_check,
               "time_check": Mode.time_check
               }
-
-
-def web_parser(link: str) -> str:
-    """Функция, получающая на вход ссылку и возвращающая текст"""
-    r = requests.get(link)
-    r = r.text
-    return r
 
 
 class Ui(PyQt5.QtWidgets.QMainWindow):
@@ -35,7 +29,7 @@ class Ui(PyQt5.QtWidgets.QMainWindow):
         self.show()
 
     def on_pushButton_clicked(self):
-        string, pattern, algo, mode, type_string = \
+        url, pattern, algorithm, mode, type_string = \
             self.textEdit_2.toPlainText(),\
             self.textEdit.toPlainText(), \
             self.comboBox.currentText(), \
@@ -43,13 +37,19 @@ class Ui(PyQt5.QtWidgets.QMainWindow):
             self.comboBox_3.currentText()
 
         if type_string == 'Web Page':
-            string = web_parser(string)
-        pars = Parser(string, pattern)
+            page_text = WebParser(url).get_page_text()
+        else:
+            page_text = url
+
+        algorithm_object = TYPE[algorithm](page_text, pattern)
         if mode == 'None':
-            print(TYPE[algo](pars))
+            print(algorithm_object.search_method())
             exit()
         else:
-            print(TYPES_MODE[mode](pars, TYPE[algo]))
+            if mode == 'time_check':
+                print(TYPES_MODE[mode](algorithm_object))
+            else:
+                TYPES_MODE[mode](algorithm_object)
             exit()
 
 
