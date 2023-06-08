@@ -83,3 +83,7 @@ class TestTest(unittest.TestCase):
     def test_boyer_moore_invalid_input_list(self):
         with self.assertRaises(TypeError):
             BoyerMoore('aa', [1, 2])
+
+    def test_rabin_karp_invalid_input_dictionary_and_set(self):
+        with self.assertRaises(TypeError):
+            RabinKarp({1, 2, 3}, {1: '1'})
