@@ -11,9 +11,9 @@ class Parser(ABC):
     """
 
     def __init__(self, string: str, pattern: str):
-        if string is None or isinstance(string, bytes):
+        if not isinstance(string, str):
             raise TypeError("Invalid input for string")
-        if pattern is None or isinstance(pattern, bytes):
+        if not isinstance(pattern, str):
             raise TypeError("Invalid input for pattern")
 
         self.string = string

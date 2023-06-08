@@ -56,18 +56,30 @@ class TestTest(unittest.TestCase):
         algorithm_object = Kmp('aba', 'a')
         assert TYPES_MODE['time_check'](algorithm_object) == 0.0
 
-    def test_kmp_invalid_input(self):
+    def test_kmp_invalid_input_None(self):
         with self.assertRaises(TypeError):
-            Kmp(None, "a")
+            Kmp(None, 'a')
 
-    def test_boyer_moore_invalid_input(self):
+    def test_boyer_moore_invalid_input_Bytes(self):
         with self.assertRaises(TypeError):
             BoyerMoore("aba", b'a')
 
-    def test_rk_invalid_input(self):
+    def test_rk_invalid_input_bytes(self):
         with self.assertRaises(TypeError):
             RabinKarp(b'aba', 'a')
 
-    def test_naive_invalid_input(self):
+    def test_naive_invalid_input_None(self):
         with self.assertRaises(TypeError):
             Naive('aba', None)
+
+    def test_kmp_invalid_input_float(self):
+        with self.assertRaises(TypeError):
+            Kmp('aba', 2.34)
+
+    def test_naive_invalid_input_bool(self):
+        with self.assertRaises(TypeError):
+            Naive(True, 'a')
+
+    def test_boyer_moore_invalid_input_list(self):
+        with self.assertRaises(TypeError):
+            BoyerMoore('aa', [1, 2])

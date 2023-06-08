@@ -9,6 +9,8 @@ class WebParser:
         """Функция для получения текста страницы.
         Возвращает текст страницы."""
         response = requests.get(self.url)
+        print(response)
         page_content = response.content
         page_content = str(page_content)
         return page_content
+
