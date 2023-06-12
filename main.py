@@ -1,5 +1,4 @@
 import sys
-import requests
 import PyQt5
 from PyQt5.QtWidgets import QApplication
 from PyQt5 import uic, QtWidgets
@@ -11,6 +10,7 @@ TYPE = {"rabin_karp": RabinKarp,
         "naive": Naive,
         "kmp": Kmp
         }
+
 TYPES_MODE = {"memory_check": Mode.memory_check,
               "time_check": Mode.time_check
               }

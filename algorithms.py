@@ -78,6 +78,8 @@ class Kmp(Parser):
         prefix = self.prefix_function(self.string)
         current_prefix = 0
         result = []
+        if pattern_len == 0:
+            return []
         for i in range(string_len):
             while current_prefix > 0 and \
                     self.string[i] != self.pattern[current_prefix]:
@@ -131,7 +133,7 @@ class RabinKarp(Parser):
         Возвращает все вхождения подстроки в строку.
         """
         string_len, pattern_len = len(self.string), len(self.pattern)
-        if pattern_len > string_len:
+        if pattern_len > string_len or pattern_len == 0:
             return []
 
         pattern_hash = 0
@@ -159,6 +161,8 @@ class Naive(Parser):
         """
         string_len, pattern_len = len(self.string), len(self.pattern)
         result = []
+        if pattern_len == 0:
+            return []
         for i in range(string_len - pattern_len + 1):
             if self.string[i:i + pattern_len] == self.pattern:
                 result.append(i)

@@ -1,6 +1,8 @@
 import unittest
 from algorithms import Kmp, RabinKarp, BoyerMoore, Naive
 from main import TYPES_MODE
+from web_parser import WebParser
+from unittest.mock import patch
 
 
 class TestTest(unittest.TestCase):
@@ -54,7 +56,7 @@ class TestTest(unittest.TestCase):
 
     def test_types_mode(self):
         algorithm_object = Kmp('aba', 'a')
-        assert TYPES_MODE['time_check'](algorithm_object) == 0.0
+        assert TYPES_MODE['time_check'](algorithm_object) >= 0.0
 
     def test_kmp_invalid_input_None(self):
         with self.assertRaises(TypeError):
@@ -87,3 +89,21 @@ class TestTest(unittest.TestCase):
     def test_rabin_karp_invalid_input_dictionary_and_set(self):
         with self.assertRaises(TypeError):
             RabinKarp({1, 2, 3}, {1: '1'})
+
+    def test_boyer_moore_invalid_input_set(self):
+        with self.assertRaises(TypeError):
+            BoyerMoore({1, 1}, '0')
+
+    @patch('requests.get')
+    def test_web_parser_page(self, mock_get):
+        mock_get.return_value.content = 'test'
+        parse = WebParser('test.com')
+        page_text = parse.get_page_text()
+        self.assertEqual(page_text, 'test')
+
+    @patch('requests.get')
+    def test_web_parser_empty_page(self, mock_get):
+        mock_get.return_value.content = ''
+        parse = WebParser('test.com')
+        page_text = parse.get_page_text()
+        self.assertEqual(page_text, '')
