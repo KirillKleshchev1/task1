@@ -1,0 +1,4 @@
+memory_profiler
+PyQt5~=5.15.9
+requests==2.31.0
+pytest-mock==3.10.0
